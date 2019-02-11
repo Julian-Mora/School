@@ -65,10 +65,11 @@
             this.helpToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelGenerations = new System.Windows.Forms.ToolStripStatusLabel();
             this.graphicsPanel1 = new GameOfLife2._0.GraphicsPanel();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.boxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -241,7 +242,8 @@
             // 
             this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.x100BoxToolStripMenuItem,
-            this.x10BoxToolStripMenuItem});
+            this.x10BoxToolStripMenuItem,
+            this.boxToolStripMenuItem});
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "Settings";
@@ -249,14 +251,14 @@
             // x100BoxToolStripMenuItem
             // 
             this.x100BoxToolStripMenuItem.Name = "x100BoxToolStripMenuItem";
-            this.x100BoxToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.x100BoxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.x100BoxToolStripMenuItem.Text = "100x100 Box";
             this.x100BoxToolStripMenuItem.Click += new System.EventHandler(this.x100BoxToolStripMenuItem_Click);
             // 
             // x10BoxToolStripMenuItem
             // 
             this.x10BoxToolStripMenuItem.Name = "x10BoxToolStripMenuItem";
-            this.x10BoxToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.x10BoxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.x10BoxToolStripMenuItem.Text = "10x10 Box";
             this.x10BoxToolStripMenuItem.Click += new System.EventHandler(this.x10BoxToolStripMenuItem_Click);
             // 
@@ -374,6 +376,15 @@
             this.toolStripButton3.Text = "NextGen";
             this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "Torus";
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -401,14 +412,11 @@
             this.graphicsPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.graphicsPanel1_Paint);
             this.graphicsPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
             // 
-            // toolStripButton2
+            // boxToolStripMenuItem
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "Torus";
+            this.boxToolStripMenuItem.Name = "boxToolStripMenuItem";
+            this.boxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.boxToolStripMenuItem.Text = "Box";
             // 
             // Form1
             // 
@@ -475,6 +483,7 @@
         private System.Windows.Forms.ToolStripMenuItem x10BoxToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStripMenuItem boxToolStripMenuItem;
     }
 }
 

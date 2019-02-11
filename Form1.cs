@@ -311,8 +311,8 @@ namespace GameOfLife2._0
 
         private void x100BoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            universe = new bool[100, 100];
             generations = 0;
+            universe = new bool[100, 100];
             graphicsPanel1.Invalidate();
         }
 
