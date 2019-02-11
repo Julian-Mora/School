@@ -276,15 +276,19 @@ namespace GameOfLife2._0
             generations = 0;
             graphicsPanel1.Invalidate();
         }
-
-        //start timer
-
-        //stop timer
         #endregion
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             timer.Enabled = !timer.Enabled;
+            if (timer.Enabled)
+            {
+                this.toolStripButton1.Image = Bitmap.FromFile("C:\\Users\\Julian\\Pictures\\Screenshots\\playbtn.png");
+            }
+            else
+            {
+                this.toolStripButton1.Image = Bitmap.FromFile("C:\\Users\\Julian\\Pictures\\Screenshots\\pausebtn.png");
+            }
         }
 
         private void changeSizeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -315,15 +319,6 @@ namespace GameOfLife2._0
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             notTorus = !notTorus;
-            if (notTorus)
-            {
-                this.toolStripButton1.Image = Bitmap.FromFile("C:\\Users\\Julian\\Pictures\\Screenshots\\plybtn.png");
-            }
-            else
-            {
-                this.toolStripButton1.Image = Bitmap.FromFile("C:\\Users\\Julian\\Pictures\\Screenshots\\pausebtn.png");
-            }
-
         }
 
         private void x10BoxToolStripMenuItem_Click(object sender, EventArgs e)
