@@ -16,6 +16,8 @@ namespace GameOfLife2._0
         bool[,] universe = new bool[5, 5];
 
         bool notTorus = true;
+        float storedCellX = -1;
+        float storedCellY = -1;
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -90,9 +92,7 @@ namespace GameOfLife2._0
 
         private void swap(ref bool u1, ref bool u2)
         {
-            bool temp = u1;
             u1 = u2;
-            u2 = temp;
         }
 
         private int torusGetNeighbor(int x, int y)
@@ -332,5 +332,36 @@ namespace GameOfLife2._0
         {
             NextGeneration();
         }
+
+        private void graphicsPanel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            // If the left mouse button was clicked
+            // store the cell and check if it goes outside it
+            if (e.Button == MouseButtons.Left)
+            {
+                // Calculate the width and height of each cell in pixels
+                float cellWidth = (float)graphicsPanel1.ClientSize.Width / universe.GetLength(0);
+                float cellHeight = (float)graphicsPanel1.ClientSize.Height / universe.GetLength(1);
+
+                // Calculate the cell that was clicked in
+                // CELL X = MOUSE X / CELL WIDTH
+                float x = e.X / cellWidth;
+                // CELL Y = MOUSE Y / CELL HEIGHT
+                float y = e.Y / cellHeight;
+
+                // Toggle the cell's state
+                if (y > universe.GetLength(1) - 1)
+                    y = universe.GetLength(1) - 1;
+                if (x > universe.GetLength(0) - 1)
+                    x = universe.GetLength(0) - 1;
+                int a = (int)x;
+                int b = (int)y;
+                universe[a, b] = !universe[a, b];
+
+                // Tell Windows you need to repaint
+                graphicsPanel1.Invalidate();
+            }
+        }
     }
 }
+

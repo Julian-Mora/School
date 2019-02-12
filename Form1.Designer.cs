@@ -53,6 +53,7 @@
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.x100BoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.x10BoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.boxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -69,7 +70,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelGenerations = new System.Windows.Forms.ToolStripStatusLabel();
             this.graphicsPanel1 = new GameOfLife2._0.GraphicsPanel();
-            this.boxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -251,16 +251,22 @@
             // x100BoxToolStripMenuItem
             // 
             this.x100BoxToolStripMenuItem.Name = "x100BoxToolStripMenuItem";
-            this.x100BoxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x100BoxToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.x100BoxToolStripMenuItem.Text = "100x100 Box";
             this.x100BoxToolStripMenuItem.Click += new System.EventHandler(this.x100BoxToolStripMenuItem_Click);
             // 
             // x10BoxToolStripMenuItem
             // 
             this.x10BoxToolStripMenuItem.Name = "x10BoxToolStripMenuItem";
-            this.x10BoxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.x10BoxToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
             this.x10BoxToolStripMenuItem.Text = "10x10 Box";
             this.x10BoxToolStripMenuItem.Click += new System.EventHandler(this.x10BoxToolStripMenuItem_Click);
+            // 
+            // boxToolStripMenuItem
+            // 
+            this.boxToolStripMenuItem.Name = "boxToolStripMenuItem";
+            this.boxToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.boxToolStripMenuItem.Text = "Box";
             // 
             // toolStrip1
             // 
@@ -411,12 +417,7 @@
             this.graphicsPanel1.TabIndex = 3;
             this.graphicsPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.graphicsPanel1_Paint);
             this.graphicsPanel1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseClick);
-            // 
-            // boxToolStripMenuItem
-            // 
-            this.boxToolStripMenuItem.Name = "boxToolStripMenuItem";
-            this.boxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.boxToolStripMenuItem.Text = "Box";
+            this.graphicsPanel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.graphicsPanel1_MouseMove);
             // 
             // Form1
             // 
