@@ -32,8 +32,12 @@ namespace GameOfLife2._0
         // Generation count
         int generations = 0;
 
+        // How many Alive
+        int alive = 0;
+
         public Form1()
         {
+
             InitializeComponent();
 
             //Read in the Settings
@@ -50,15 +54,28 @@ namespace GameOfLife2._0
             timer.Enabled = false; // start timer running
         }
 
-        #region WHAT TO EDIT
+        #region GENERATIONS
         // Calculate the next generation of cells
         private void NextGeneration()
         {
             // Increment generation count
             generations++;
+            // Calculate how many Alive
+            for (int y = 0; y < universe.GetLength(1); y++)
+            {
+                // Iterate through the universe in the x, left to right
+                for (int x = 0; x < universe.GetLength(0); x++)
+                {
+                    if (universe[x, y])
+                        ++alive;
+                }
+            }
 
-            // Update status strip generations
-            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+                    // Update status strip generations
+                    toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            // Update alive status strip
+            toolStripStatusLabel1.Text = "Alive = " + alive.ToString();
+            alive = 0;
 
             //get neighbor count and apply all the rules here
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -96,6 +113,7 @@ namespace GameOfLife2._0
                     swap(ref universe[i, j], ref universe2[i, j]);
                 }
             }
+
             graphicsPanel1.Invalidate();
         }
 
@@ -104,6 +122,7 @@ namespace GameOfLife2._0
             u1 = u2;
         }
 
+        // IN PROGRESS
         private int torusGetNeighbor(int x, int y)
         {
             int count = 0;
@@ -268,7 +287,7 @@ namespace GameOfLife2._0
         }
         #endregion
 
-        
+        // NEW 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //set the array to empty
@@ -283,6 +302,7 @@ namespace GameOfLife2._0
             // redraw with invalidate
             //reset the generation 
             generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
             graphicsPanel1.Invalidate();
         }
         
@@ -300,6 +320,7 @@ namespace GameOfLife2._0
             }
         }
 
+        // DOES SOMETHING
         private void changeSizeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -318,8 +339,8 @@ namespace GameOfLife2._0
             universe = new bool[a, b];
             universe2 = new bool[a, b];
         }
-        // 100x100 box button
 
+        // 100x100 box button
         private void x100BoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             universe = new bool[100, 100];
@@ -351,7 +372,7 @@ namespace GameOfLife2._0
             NextGeneration();
         }
 
-        // in progress for highlight for 
+        // CLICK AND DRAG TO SELECT (IN PROGRESS) 
         private void graphicsPanel1_MouseMove(object sender, MouseEventArgs e)
         {
             //// Calculate the width and height of each cell in pixels
@@ -389,6 +410,7 @@ namespace GameOfLife2._0
             //}
         }
 
+        // NEW
         private void newToolStripButton_Click(object sender, EventArgs e)
         {
             universe = new bool[universe.GetLength(0), universe.GetLength(1)];
@@ -398,6 +420,7 @@ namespace GameOfLife2._0
             graphicsPanel1.Invalidate();
         }
 
+        // COLOR IN TOOLSTRIP SETTINGS
         private void colorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ColorDialog dlg = new ColorDialog();
@@ -410,6 +433,7 @@ namespace GameOfLife2._0
 
         }
 
+        // CHOOSE BOX  (IN PROGRESS)
         private void xBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             universe = new bool[10, 10];
@@ -419,6 +443,7 @@ namespace GameOfLife2._0
             graphicsPanel1.Invalidate();
         }
 
+        // NEW
         private void newToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             universe = new bool[universe.GetLength(0), universe.GetLength(1)];
@@ -438,6 +463,7 @@ namespace GameOfLife2._0
             //Settings in the context menu
         }
 
+        // CHANGING THE THE COLORS OF THE GRID
         private void gridColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //change grid color
@@ -450,6 +476,7 @@ namespace GameOfLife2._0
             }
         }
 
+        //CHANGING THE COLORS OF THE CELL
         private void cellColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //change cell colors
@@ -462,6 +489,7 @@ namespace GameOfLife2._0
             }
         }
 
+        // SAVING THE GAME
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             //Update The Settings Here
@@ -473,7 +501,7 @@ namespace GameOfLife2._0
             //writing to the file
             Properties.Settings.Default.Save();
         }
-
+        // RESETING THE GAME
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reset();
@@ -486,7 +514,7 @@ namespace GameOfLife2._0
             graphicsPanel1.Invalidate();
 
         }
-
+        // RELOADING THE GAME
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Reload();
@@ -497,6 +525,22 @@ namespace GameOfLife2._0
             notTorus = Properties.Settings.Default.notTorus;
             timer.Enabled = Properties.Settings.Default.Timer;
             graphicsPanel1.Invalidate();
+        }
+
+        private void toolStripStatusLabel1_TextChanged(object sender, EventArgs e)
+        {
+            toolStripStatusLabel1.Text = "Alive = " + alive.ToString();
+        }
+
+        private void onToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            gridColor = cellColor;
+            graphicsPanel1.Invalidate();
+        }
+
+        private void offToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            gridColor = Color.Black;
         }
     }
 }
