@@ -14,10 +14,12 @@ namespace GameOfLife2._0
     {
         // The universe array
         bool[,] universe = new bool[5, 5];
+        bool[,] universe2 = new bool[5, 5];
 
         bool notTorus = true;
         float storedCellX = -1;
         float storedCellY = -1;
+
 
         // Drawing colors
         Color gridColor = Color.Black;
@@ -34,10 +36,18 @@ namespace GameOfLife2._0
         {
             InitializeComponent();
 
+            //Read in the Settings
+            cellColor = Properties.Settings.Default.CellColor;
+            gridColor = Properties.Settings.Default.GridColor;
+            universe = new bool[Properties.Settings.Default.GridSize, Properties.Settings.Default.GridSize];
+            universe2 = new bool[Properties.Settings.Default.GridSize, Properties.Settings.Default.GridSize];
+
+            notTorus = Properties.Settings.Default.notTorus;
+
             // Setup the timer
             timer.Interval = 100; // milliseconds
             timer.Tick += Timer_Tick;
-            timer.Enabled = true; // start timer running
+            timer.Enabled = false; // start timer running
         }
 
         #region WHAT TO EDIT
@@ -49,8 +59,6 @@ namespace GameOfLife2._0
 
             // Update status strip generations
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
-
-            bool[,] universe2 = new bool[universe.GetLength(0), universe.GetLength(1)];
 
             //get neighbor count and apply all the rules here
             for (int y = 0; y < universe.GetLength(1); y++)
@@ -79,6 +87,7 @@ namespace GameOfLife2._0
 
                 }
             }
+
             //swap the array with alive and dead things
             for (int i = 0; i < universe.GetLength(1); i++)
             {
@@ -259,7 +268,7 @@ namespace GameOfLife2._0
         }
         #endregion
 
-        #region Graphic Panel Things To Edit
+        
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //set the array to empty
@@ -276,18 +285,18 @@ namespace GameOfLife2._0
             generations = 0;
             graphicsPanel1.Invalidate();
         }
-        #endregion
-
+        
+        // start and stop button
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             timer.Enabled = !timer.Enabled;
             if (timer.Enabled)
             {
-                this.toolStripButton1.Image = Bitmap.FromFile("C:\\Users\\Julian\\Pictures\\Screenshots\\playbtn.png");
+                toolStripButton1.Image = GameOfLife2._0.Properties.Resources.playbtn;
             }
             else
             {
-                this.toolStripButton1.Image = Bitmap.FromFile("C:\\Users\\Julian\\Pictures\\Screenshots\\pausebtn.png");
+                toolStripButton1.Image = GameOfLife2._0.Properties.Resources.pausebtn;
             }
         }
 
@@ -307,60 +316,187 @@ namespace GameOfLife2._0
 
 
             universe = new bool[a, b];
+            universe2 = new bool[a, b];
         }
+        // 100x100 box button
 
         private void x100BoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            generations = 0;
             universe = new bool[100, 100];
+            universe2 = new bool[100, 100];
+            generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
             graphicsPanel1.Invalidate();
         }
 
+        // torus button
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             notTorus = !notTorus;
         }
 
+        // 10x10 box button
         private void x10BoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
             universe = new bool[10, 10];
+            universe2 = new bool[10, 10];
             generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
             graphicsPanel1.Invalidate();
         }
 
+        // step to the next generation button
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
             NextGeneration();
         }
 
+        // in progress for highlight for 
         private void graphicsPanel1_MouseMove(object sender, MouseEventArgs e)
         {
-            // If the left mouse button was clicked
-            // store the cell and check if it goes outside it
-            if (e.Button == MouseButtons.Left)
+            //// Calculate the width and height of each cell in pixels
+            //float cellWidth = (float)graphicsPanel1.ClientSize.Width / universe.GetLength(0);
+            //float cellHeight = (float)graphicsPanel1.ClientSize.Height / universe.GetLength(1);
+
+
+            //// Calculate the cell that was clicked in
+            //// CELL X = MOUSE X / CELL WIDTH
+            //float x = e.X / cellWidth;
+            //// CELL Y = MOUSE Y / CELL HEIGHT
+            //float y = e.Y / cellHeight;
+
+            //if (storedCellX == -1 || storedCellY == -1)
+            //{
+            //    storedCellX = x;
+            //    storedCellY = y;
+            //}
+                
+
+            //// store the cell and check if it goes outside it
+            //if (x == storedCellX && y == storedCellY)
+            //{
+            //        // Toggle the cell's state
+            //        if (y > universe.GetLength(1) - 1)
+            //            y = universe.GetLength(1) - 1;
+            //        if (x > universe.GetLength(0) - 1)
+            //            x = universe.GetLength(0) - 1;
+            //        int a = (int)x;
+            //        int b = (int)y;
+            //        universe[a, b] = !universe[a, b];
+
+            //        // Tell Windows you need to repaint
+            //        graphicsPanel1.Refresh();
+            //}
+        }
+
+        private void newToolStripButton_Click(object sender, EventArgs e)
+        {
+            universe = new bool[universe.GetLength(0), universe.GetLength(1)];
+            universe2 = new bool[universe.GetLength(0), universe.GetLength(1)];
+            generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog dlg = new ColorDialog();
+            dlg.Color = cellColor;
+            if (DialogResult.OK == dlg.ShowDialog())
             {
-                // Calculate the width and height of each cell in pixels
-                float cellWidth = (float)graphicsPanel1.ClientSize.Width / universe.GetLength(0);
-                float cellHeight = (float)graphicsPanel1.ClientSize.Height / universe.GetLength(1);
-
-                // Calculate the cell that was clicked in
-                // CELL X = MOUSE X / CELL WIDTH
-                float x = e.X / cellWidth;
-                // CELL Y = MOUSE Y / CELL HEIGHT
-                float y = e.Y / cellHeight;
-
-                // Toggle the cell's state
-                if (y > universe.GetLength(1) - 1)
-                    y = universe.GetLength(1) - 1;
-                if (x > universe.GetLength(0) - 1)
-                    x = universe.GetLength(0) - 1;
-                int a = (int)x;
-                int b = (int)y;
-                universe[a, b] = !universe[a, b];
-
-                // Tell Windows you need to repaint
+                cellColor = dlg.Color;
                 graphicsPanel1.Invalidate();
             }
+
+        }
+
+        private void xBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            universe = new bool[10, 10];
+            universe2 = new bool[10, 10];
+            generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void newToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            universe = new bool[universe.GetLength(0), universe.GetLength(1)];
+            universe2 = new bool[universe.GetLength(0), universe.GetLength(1)];
+            generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            graphicsPanel1.Invalidate();
+        }
+
+        private void boxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //call another form to change size
+        }
+
+        private void settingsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            //Settings in the context menu
+        }
+
+        private void gridColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //change grid color
+            ColorDialog dlg = new ColorDialog();
+            dlg.Color = cellColor;
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                gridColor = dlg.Color;
+                graphicsPanel1.Invalidate();
+            }
+        }
+
+        private void cellColorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //change cell colors
+            ColorDialog dlg = new ColorDialog();
+            dlg.Color = cellColor;
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                cellColor = dlg.Color;
+                graphicsPanel1.Invalidate();
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //Update The Settings Here
+            Properties.Settings.Default.CellColor = cellColor;
+            Properties.Settings.Default.GridColor = gridColor;
+            Properties.Settings.Default.notTorus = notTorus;
+            Properties.Settings.Default.GridSize = universe.GetLength(0);
+            Properties.Settings.Default.Timer = timer.Enabled;
+            //writing to the file
+            Properties.Settings.Default.Save();
+        }
+
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reset();
+            cellColor = Properties.Settings.Default.CellColor;
+            gridColor = Properties.Settings.Default.GridColor;
+            universe = new bool[Properties.Settings.Default.GridSize, Properties.Settings.Default.GridSize];
+            universe2 = new bool[Properties.Settings.Default.GridSize, Properties.Settings.Default.GridSize];
+            notTorus = Properties.Settings.Default.notTorus;
+            timer.Enabled = Properties.Settings.Default.Timer;
+            graphicsPanel1.Invalidate();
+
+        }
+
+        private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Reload();
+            cellColor = Properties.Settings.Default.CellColor;
+            gridColor = Properties.Settings.Default.GridColor;
+            universe = new bool[Properties.Settings.Default.GridSize, Properties.Settings.Default.GridSize];
+            universe2 = new bool[Properties.Settings.Default.GridSize, Properties.Settings.Default.GridSize];
+            notTorus = Properties.Settings.Default.notTorus;
+            timer.Enabled = Properties.Settings.Default.Timer;
+            graphicsPanel1.Invalidate();
         }
     }
 }
