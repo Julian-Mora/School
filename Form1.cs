@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -206,7 +207,7 @@ namespace GameOfLife2._0
         {
             NextGeneration();
         }
-
+        //PAINTING
         private void graphicsPanel1_Paint(object sender, PaintEventArgs e)
         {
             // Calculate the width and height of each cell in pixels
@@ -256,7 +257,7 @@ namespace GameOfLife2._0
             gridPen.Dispose();
             cellBrush.Dispose();
         }
-
+        //MOUSE STUFF
         private void graphicsPanel1_MouseClick(object sender, MouseEventArgs e)
         {
             // If the left mouse button was clicked
@@ -306,7 +307,7 @@ namespace GameOfLife2._0
             graphicsPanel1.Invalidate();
         }
         
-        // start and stop button
+        // PLAY/PAUSE
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             timer.Enabled = !timer.Enabled;
@@ -350,7 +351,7 @@ namespace GameOfLife2._0
             graphicsPanel1.Invalidate();
         }
 
-        // torus button
+        // TORUS
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             notTorus = !notTorus;
@@ -366,7 +367,7 @@ namespace GameOfLife2._0
             graphicsPanel1.Invalidate();
         }
 
-        // step to the next generation button
+        // NEXT GENERATION
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
             NextGeneration();
@@ -436,8 +437,11 @@ namespace GameOfLife2._0
         // CHOOSE BOX  (IN PROGRESS)
         private void xBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            universe = new bool[10, 10];
-            universe2 = new bool[10, 10];
+            Form2 dlg = new Form2();
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+
+            }
             generations = 0;
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
             graphicsPanel1.Invalidate();
@@ -452,10 +456,17 @@ namespace GameOfLife2._0
             toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
             graphicsPanel1.Invalidate();
         }
-
+        //nothing
         private void boxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //call another form to change size
+            Form2 dlg = new Form2();
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+
+            }
+            generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            graphicsPanel1.Invalidate();
         }
 
         private void settingsToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -463,7 +474,7 @@ namespace GameOfLife2._0
             //Settings in the context menu
         }
 
-        // CHANGING THE THE COLORS OF THE GRID
+        // CHANGING THE COLORS OF THE GRID
         private void gridColorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             //change grid color
@@ -489,7 +500,7 @@ namespace GameOfLife2._0
             }
         }
 
-        // SAVING THE GAME
+        // SAVING AT CLOSE
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             //Update The Settings Here
@@ -530,17 +541,177 @@ namespace GameOfLife2._0
         private void toolStripStatusLabel1_TextChanged(object sender, EventArgs e)
         {
             toolStripStatusLabel1.Text = "Alive = " + alive.ToString();
+            toolStripStatusLabel1.Invalidate();
         }
-
+        // TURN ON GRID
         private void onToolStripMenuItem_Click(object sender, EventArgs e)
         {
             gridColor = cellColor;
             graphicsPanel1.Invalidate();
         }
-
+        // TURN OFF GRID
         private void offToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            gridColor = Color.Black;
+            gridColor = deadCell;
+            graphicsPanel1.Invalidate();
+        }
+        //RANDOM NO SEED
+        private void randomToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Random rand = new Random();
+            for (int i = 0; i < universe.GetLength(0) * universe.GetLength(1); i++)
+            {
+                universe[rand.Next(0, universe.GetLength(0)), rand.Next(0, universe.GetLength(1))] = true;
+                universe[rand.Next(0, universe.GetLength(0)), rand.Next(0, universe.GetLength(1))] = false;
+            }
+            graphicsPanel1.Invalidate();
+        }
+        //SAVING
+        private void saveToolStripButton_Click(object sender, EventArgs e)
+        {
+            StreamWriter sw = new StreamWriter("TestFile.cells");
+            string line = "! \n";
+            for (int x = 0; x < universe.GetLength(0); x++)
+            {
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    if (universe[x, y] == true)
+                    {
+                        line += "o";
+                    }
+                    else
+                    {
+                        line += ".";
+                    }     
+                }
+                if (x != universe.GetLength(0) - 1)
+                    line += "\n";
+            }
+            sw.WriteLine(line);
+            sw.Close();
+        }
+        //SAVING
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StreamWriter sw = new StreamWriter("TestFile.cells");
+            string line = "! \n";
+            for (int x = 0; x < universe.GetLength(0); x++)
+            {
+                for (int y = 0; y < universe.GetLength(1); y++)
+                {
+                    if (universe[x, y] == true)
+                    {
+                        line += "o";
+                    }
+                    else
+                    {
+                        line += ".";
+                    }
+                }
+                if(x != universe.GetLength(0) -1)
+                    line += "\n";
+            }
+            sw.WriteLine(line);
+            sw.Close();
+        }
+        //OPENING
+        private void openToolStripButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            string line;
+            List<string> Lines = new List<string>();
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                StreamReader sr = new StreamReader(dlg.FileName);
+                //reading from the file
+
+                    while (!sr.EndOfStream)
+                    {
+                    if( (line = sr.ReadLine()) != null && (line[0] != '!'))
+                        Lines.Add(line);
+                }
+                
+                //resize universe
+                universe = new bool[Lines[0].Length, Lines.Count];
+                universe2 = new bool[Lines[0].Length, Lines.Count];
+
+                //apply changes
+                for (int j = 0; j < universe.GetLength(0) - 1; j++)
+                {
+
+                    for (int i = 0; i < universe.GetLength(1) - 1; i++)
+                    {
+                        if (Lines[j][i] == 'o')
+                        {
+                            universe[j, i] = true;
+                        }
+                        else
+                        {
+                            universe[j, i] = false;
+                        }
+                    }
+                }
+                sr.Close();
+                graphicsPanel1.Invalidate();
+            }
+        }
+        //OPENING
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            string line;
+            List<string> Lines = new List<string>();
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                StreamReader sr = new StreamReader(dlg.FileName);
+                //reading from the file
+
+                while (!sr.EndOfStream)
+                {
+                    if ((line = sr.ReadLine()) != null && (line[0] != '!'))
+                        Lines.Add(line);
+                }
+
+                //resize universe
+                universe = new bool[Lines[0].Length, Lines.Count];
+                universe2 = new bool[Lines[0].Length, Lines.Count];
+
+                //apply changes
+                for (int j = 0; j < universe.GetLength(0) - 1; j++)
+                {
+
+                    for (int i = 0; i < universe.GetLength(1) - 1; i++)
+                    {
+                        if (Lines[j][i] == 'o')
+                        {
+                            universe[j, i] = true;
+                        }
+                        else
+                        {
+                            universe[j, i] = false;
+                        }
+                    }
+                }
+                sr.Close();
+                graphicsPanel1.Invalidate();
+            }
+        }
+        //OPTIONS
+        private void optionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form2 dlg = new Form2();
+            dlg.setTime(timer.Interval);
+            dlg.setHeight(universe.GetLength(0));
+            dlg.setWidth(universe.GetLength(1));
+            if (DialogResult.OK == dlg.ShowDialog())
+            {
+                timer.Interval = dlg.getTime();
+                universe = new bool[dlg.getWidth(), dlg.getHeight()];
+                universe2 = new bool[dlg.getWidth(), dlg.getHeight()];
+            }
+            generations = 0;
+            toolStripStatusLabelGenerations.Text = "Generations = " + generations.ToString();
+            graphicsPanel1.Invalidate();
         }
     }
 }
